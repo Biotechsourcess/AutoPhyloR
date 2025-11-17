@@ -1,0 +1,48 @@
+# --- Script de Instalación de Dependencias ---
+
+# 1. Definir los paquetes de CRAN
+# (shiny, shinyjs, future, promises, ggplot2, ape)
+cran_packages <- c("shiny", 
+                   "shinyjs", 
+                   "future", 
+                   "promises", 
+                   "ggplot2", 
+                   "ape")
+
+# 2. Definir los paquetes de Bioconductor
+# (ggtree, Biostrings)
+bioc_packages <- c("ggtree", 
+                   "Biostrings")
+
+# --- Instalación de paquetes de CRAN ---
+cat("Verificando paquetes de CRAN...\n")
+for (pkg in cran_packages) {
+  # requireNamespace verifica si el paquete existe sin cargarlo
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    cat("Instalando", pkg, "...\n")
+    install.packages(pkg, dependencies = TRUE)
+  } else {
+    cat(pkg, "ya está instalado.\n")
+  }
+}
+
+# --- Instalación de paquetes de Bioconductor ---
+cat("\nVerificando paquetes de Bioconductor...\n")
+
+# 3. Asegurarse de que BiocManager (el instalador) esté instalado
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
+# 4. Instalar los paquetes de Bioconductor
+for (pkg in bioc_packages) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    cat("Instalando", pkg, "con BiocManager...\n")
+    # Usar el instalador de Bioconductor
+    BiocManager::install(pkg, ask = FALSE) # ask = FALSE evita preguntas de confirmación
+  } else {
+    cat(pkg, "ya está instalado.\n")
+  }
+}
+
+cat("\n--- Verificación de librerías completada. ---\n")
